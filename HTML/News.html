@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized News Feed</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            flex-direction: column; /* Added to stack elements vertically */
+            text-align: center; /* Center the text inside elements */
+        }
+        .btn {
+            background: #35d457;ter
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin-top: 1rem; /* Added margin to separate button from other elements */
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+            font-weight: bold;
+        }
+        #newsFeed {
+            margin-top: 1rem; /* Added margin to separate news feed from other elements */
+        }
+    </style>
+</head>
+<body>
+    <h1>Personalized News Feed</h1>
+    <label for="category">Select News Category:</label>
+    <select id="category" onchange="fetchNews()">
+        <option value="business">Business</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="health">Health</option>
+        <option value="science">Science</option>
+        <option value="sports">Sports</option>
+        <option value="technology">Technology</option>
+    </select>
+    <button class="btn" onclick="fetchNews()">Get News</button>
+    <div id="newsFeed">
+        <!-- News articles will be displayed here -->
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function fetchNews() {
+            let category = document.getElementById('category').value;
+            $.ajax({
+                url: 'fetch_news.cgi',
+                type: 'GET',
+                data: { category: category },
+                success: function(response) {
+                    $('#newsFeed').html(response);
+                },
+                error: function(error) {
+                    console.log('Error fetching news:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
