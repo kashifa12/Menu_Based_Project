@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send WhatsApp Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input, button {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+         button {
+            padding: 10px;
+            border: 1px solid #4cc32f;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4dc274;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        #submit {
+            margin-top: 20px;
+            padding: 10px;
+            background: #49c137;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Send WhatsApp Message</h1>
+    <form action="/cgi-bin/Whatsapp.py" method="post">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" id="phone_number" name="phone_number" required><br>
+
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message" required><br>
+
+        <label for="hour">Hour (24-hour format):</label>
+        <input type="number" id="hour" name="hour" min="0" max="23" required><br>
+
+        <label for="minute">Minute:</label>
+        <input type="number" id="minute" name="minute" min="0" max="59" required><br>
+
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>
