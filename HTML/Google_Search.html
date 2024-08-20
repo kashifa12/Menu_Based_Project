@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Search</title>
+    <link rel="icon" href="data:,">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        #searchQuery {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #searchBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50; /* Green color */
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #searchBtn:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        #results div {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #results h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        #results p {
+            margin: 5px 0;
+            color: #555;
+        }
+        #results a {
+            color: #4285f4;
+            text-decoration: none;
+        }
+        #results a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Google Search</h2>
+    <input type="text" id="searchQuery" placeholder="Enter your search query">
+    <button id="searchBtn">Search</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById("searchBtn").addEventListener("click", function() {
+            var query = document.getElementById("searchQuery").value.trim();
+            if (query !== "") {
+                fetch('/cgi-bin/googlesearch.py?query=' + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        function displayResults(results) {
+            var resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+            if (results) {
+                results.forEach(function(result, index) {
+                    var resultDiv = document.createElement("div");
+                    resultDiv.innerHTML = `
+                        <h3>Result ${index + 1}:</h3>
+                        <p>Title: ${result.title}</p>
+                        <p>Link: <a href="${result.link}" target="_blank">${result.link}</a></p>
+                        <p>Snippet: ${result.snippet}</p>
+                    `;
+                    resultsDiv.appendChild(resultDiv);
+                });
+            } else {
+                resultsDiv.textContent = "Failed to retrieve search results.";
+            }
+        }
+    </script>
+</body>
+</html>
+
