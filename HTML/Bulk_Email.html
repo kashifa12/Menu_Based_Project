@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Email Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .email-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .email-form h2 {
+            margin-bottom: 20px;
+        }
+        .email-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .email-form input, .email-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .email-form button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .email-form button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-form">
+    <h2>Send Bulk Emails</h2>
+    <form id="bulkEmailForm">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" rows="5" required></textarea>
+
+        <label for="recipients">Recipients (comma separated):</label>
+        <input type="text" id="recipients" name="recipients" required>
+
+        <button type="submit">Send Emails</button>
+    </form>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+document.getElementById('bulkEmailForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var form = event.target;
+    var formData = new FormData(form);
+
+    fetch('/cgi-bin/bulkemail.py', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        var resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '<h3>Results:</h3>';
+        if (data.error) {
+            resultDiv.innerHTML += `<p>Error: ${data.error}</p>`;
+        } else {
+            data.results.forEach(result => {
+                resultDiv.innerHTML += `<p>Recipient: ${result.recipient}, Status: ${result.status}`;
+                if (result.status === 'failed') {
+                    resultDiv.innerHTML += `, Error: ${result.error}`;
+                }
+                resultDiv.innerHTML += '</p>';
+            });
+        }
+    })
+    .catch(error => {
+        document.getElementById('result').innerHTML = `<p>Error: ${error.message}</p>`;
+    });
+});
+</script>
+
+</body>
+</html>
